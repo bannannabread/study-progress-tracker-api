@@ -4,6 +4,7 @@ from app.database import get_session
 from app.models import Topic
 from app.schemas import TopicUpdate
 from app.schemas import TopicCreate
+from typing import Optional
 
 router = APIRouter(prefix = "/topics", tags = ["Topics"])
 # router creates all the routes used (post, get, get specific id) and sets that
@@ -60,6 +61,13 @@ def delete_topic(topic_id: int, topic_update: TopicUpdate, session: Session = De
     session.delete(topic)
     session.commit()
     return { "message": "Topic deleted successfully" }
+
+@router.get("/") # filter/search topics by status
+def list_topics(status: Optional[str] = None, session: Session = Depends(get_session)):
+    query = select(Topic)
+    if status:
+        query = query.where(Topic.status == status)
+    return session.exec(query).all()
 
 # topics.py defines the routes for managing Topic objects:
 # - POST /topics: create a new topic in the database
