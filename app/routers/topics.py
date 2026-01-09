@@ -52,8 +52,8 @@ def update_topic(topic_id: int, topic_update: TopicUpdate, session: Session = De
     session.refresh(topic)
     return topic
 
-@router.delete("/{topic.id}")
-def delete_topic(topic_id: int, topic_update: TopicUpdate, session: Session = Depends(get_session)):
+@router.delete("/{topic_id}")
+def delete_topic(topic_id: int, session: Session = Depends(get_session)):
     topic = session.get(Topic, topic_id)
     if not topic:
         raise HTTPException(status_code = 404, detail = "Topic not found")
