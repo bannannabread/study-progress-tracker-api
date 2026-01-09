@@ -8,7 +8,8 @@ class Topic(SQLModel, table = True): #sqlmodel variable allows Topic class to ma
     description: str
     status: str = "not_started"
     minutes_spent: int = 0
-    created_at: datetime = Field(default_factory = datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
 
 # models.py defines the Topic class and its data (id, title, description, etc.).
 # By inheriting from SQLModel, each Topic object maps directly to a database table.

@@ -2,13 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from app.database import get_session
 from app.models import Topic
+from app.schemas import TopicUpdate
+from app.schemas import TopicCreate
 
 router = APIRouter(prefix = "/topics", tags = ["Topics"])
 # router creates all the routes used (post, get, get specific id) and sets that
 # they will all start with /topics, also added a tag to group them together
 
 @router.post("/")
-def create_topic(topic: Topic, session: Session = Depends(get_session)):
+def create_topic(topic_data: TopicCreate, session: Session = Depends(get_session)):
+    topic = Topic(**topic_data.dict())
     session.add(topic)
     session.commit()
     session.refresh(topic)
@@ -31,6 +34,32 @@ def get_topic(topic_id: int, session: Session = Depends(get_session)):
 # looks up topic by primary key (id)
 # if doesnt exist, raises a 404 error
 # otherwise, returns it
+
+@router.patch("/{topic_id}")
+def update_topic(topic_id: int, topic_update: TopicUpdate, session: Session = Depends(get_session)):
+    topic = session.get(Topic, topic_id)
+    if not topic:
+        raise HTTPException(status_code = 404, detail = "Topic not found")
+
+    # update certain fields
+    update_data = topic_update.dict(exclude_unset = True)
+    for key, value in update_data.items():
+        setattr(topic, key, value)
+
+    session.add(topic)
+    session.commit()
+    session.refresh(topic)
+    return topic
+
+@router.delete("/{topic.id}")
+def delete_topic(topic_id: int, topic_update: TopicUpdate, session: Session = Depends(get_session)):
+    topic = session.get(Topic, topic_id)
+    if not topic:
+        raise HTTPException(status_code = 404, detail = "Topic not found")
+
+    session.delete(topic)
+    session.commit()
+    return { "message": "Topic deleted successfully" }
 
 # topics.py defines the routes for managing Topic objects:
 # - POST /topics: create a new topic in the database
