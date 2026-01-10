@@ -2,6 +2,8 @@ import { useState } from 'react';
 import './App.css';
 import SubjectsList from './components/subjects/SubjectsList';
 import Timer from './timer/StudyTimer';
+import History from './history/StudyHistory';
+import Statistics from './statistics/Statistics'
 
 function App() {
   const [activeTab, setActiveTab] = useState('subjects');
@@ -49,8 +51,8 @@ function App() {
       <div>
         {activeTab === 'subjects' && <SubjectsList />}
         {activeTab === 'timer' && <Timer />}
-        {activeTab === 'history' && <div>History Tab</div>}
-        {activeTab === 'statistics' && <div>Statistics Tab</div>}
+        {activeTab === 'history' && <History />}
+        {activeTab === 'statistics' && <Statistics/>}
       </div>
     </div>
   );
