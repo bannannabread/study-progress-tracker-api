@@ -286,3 +286,99 @@
 .error-border:focus {
   outline-color: #ff4444 !important;
 }
+
+/* Timer Styles */
+.timer-container {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 2rem;
+}
+
+.timer-selector {
+  margin-bottom: 2rem;
+}
+
+.timer-selector label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.timer-selector select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+}
+
+.timer-display {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #2563eb;
+  margin: 2rem 0;
+  font-family: 'Courier New', monospace;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.timer-controls button {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-start {
+  background: #10b981;
+  color: white;
+}
+
+.btn-start:hover {
+  background: #059669;
+}
+
+.btn-pause {
+  background: #f59e0b;
+  color: white;
+}
+
+.btn-pause:hover {
+  background: #d97706;
+}
+
+.btn-resume {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-resume:hover {
+  background: #2563eb;
+}
+
+.btn-stop {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-stop:hover {
+  background: #dc2626;
+}
+
+.session-info {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #f3f4f6;
+  border-radius: 8px;
+}

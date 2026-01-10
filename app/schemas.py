@@ -12,3 +12,5 @@ class TopicUpdate(BaseModel):
     description: Optional[str] = None
     status: Optional[str] = Field(default = None, pattern = "^(not_started|in_progress|done)$")
     minutes_spent: Optional[int] = Field(default = None, ge = 0)
+
+    
