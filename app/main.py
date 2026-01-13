@@ -4,6 +4,7 @@ from sqlmodel import SQLModel
 from app.database import engine
 from app.routers import topics
 from app.routers import sessions
+from app.routers import pokemon
 
 app = FastAPI(title = "Study Progress Tracker") # creates a FastAPI application instance, app is a backend "app object"
 
@@ -15,13 +16,13 @@ app.add_middleware(
     allow_headers = ["*"],
 )
 
+app.include_router(topics.router)           # routers/topics is the group of routes (POST, GET, etc)
+app.include_router(sessions.router)
+app.include_router(pokemon.router)
 
 @app.on_event("startup")
 def on_startup():
     SQLModel.metadata.create_all(engine)    # creates all the database tables, if not already existing
-
-app.include_router(topics.router)           # routers/topics is the group of routes (POST, GET, etc)
-app.include_router(sessions.router)
 
 @app.get("/")
 def read_root():
@@ -30,3 +31,4 @@ def read_root():
 # main.py creates the FastAPI app, sets up the database tables on startup,
 # and includes the routes defined in topics.py so the app can handle requests
 # like GET /topics and POST /topics.
+

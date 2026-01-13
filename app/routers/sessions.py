@@ -4,6 +4,7 @@ from ..database import get_session
 from ..models import StudySession, Topic
 from ..session_schemas import SessionCreate, SessionEnd, SessionResponse
 from datetime import datetime
+from ..pokemon.pokemon_utils import calculate_level_from_exp, EXP_PER_MINUTE
 
 router = APIRouter(prefix = "/sessions", tags = ["Sessions"])
 
@@ -53,6 +54,13 @@ def end_session(session_id: int, session_data: SessionEnd, db: Session = Depends
 
         if topic.status == "not_started":
             topic.status = "in_progress"
+
+        if topic.pokemon_id:
+            exp_gained = session_data.duration_minutes * EXP_PER_MINUTE
+            topic.pokemon_exp += exp_gained
+
+            new_level, _ = calculate_level_from_exp(topic.pokemon_exp)
+            topic.pokemon_level = new_level
 
     # save it
     db.add(study_session)
