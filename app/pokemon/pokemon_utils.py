@@ -1,34 +1,45 @@
 import requests
-from typing import Optional
+from typing import Optional, Dict
 
+# EXP per minute of studying
 EXP_PER_MINUTE = 50
 
+# Simplified leveling curve (based on Pokémon Medium Fast growth rate)
+# Level requirements are reduced for faster progression
 def get_exp_for_level(level: int) -> int:
-    """Get total EXP needed to reach a level"""
+    """Get total EXP needed to reach a given level"""
     if level <= 1:
         return 0
+    # Simplified formula: level^3 for faster leveling
     return level ** 3
 
 def calculate_level_from_exp(exp: int) -> tuple[int, int]:
-    """Calculate level & remaining EXP from total EXP in format: (level, exp_in_curr_level)"""
+    """
+    Calculate level and remaining EXP from total EXP
+    Returns: (level, exp_in_current_level)
+    """
     level = 1
     while get_exp_for_level(level + 1) <= exp:
         level += 1
-
-    exp_for_curr_level = get_exp_for_level(level)
-    remaining_exp = exp - exp_for_curr_level
+    
+    exp_for_current_level = get_exp_for_level(level)
+    remaining_exp = exp - exp_for_current_level
+    
     return level, remaining_exp
 
 def get_exp_for_next_level(current_level: int, current_exp: int) -> int:
-    """Get how much exp needed until next level"""
-    exp_for_next = get_exp_for_level(level + 1)
-    exp_for_curr = get_exp_for_level(level)
-    needed = exp_for_next - exp_for_curr
-    exp_in_level = current_exp - exp_for_curr
+    """Get how much EXP needed until next level"""
+    exp_for_next = get_exp_for_level(current_level + 1)
+    exp_for_current = get_exp_for_level(current_level)
+    needed = exp_for_next - exp_for_current
+    
+    # How much we already have toward next level
+    exp_in_level = current_exp - exp_for_current
+    
     return needed - exp_in_level
 
-def fetch_pokemon_data(pokemon_id: int) -> Optional[dict]:
-    """Fetch Pokémon data from PokeAPI"""
+def fetch_pokemon_data(pokemon_id: int) -> Optional[Dict]:
+    """Fetch Pokémon data from PokéAPI"""
     try:
         response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_id}")
         if response.status_code == 200:
@@ -42,13 +53,15 @@ def fetch_pokemon_data(pokemon_id: int) -> Optional[dict]:
         print(f"Error fetching Pokémon data: {e}")
     return None
 
+# Starter Pokémon IDs
 STARTER_POKEMON = {
     "bulbasaur": 1,
     "charmander": 4,
     "squirtle": 7
 }
 
-#Format: {pokemon_id: (evolution_id, level_required)}
+# Evolution chains with level requirements
+# Format: {pokemon_id: (evolution_id, level_required)}
 EVOLUTION_DATA = {
     # Gen 1 Starters
     1: (2, 16),    # Bulbasaur -> Ivysaur at 16
@@ -129,13 +142,16 @@ EVOLUTION_DATA = {
     148: (149, 55),# Dragonair -> Dragonite at 55
 }
 
-def check_evolution(pokemon_id: int, current_level: int) -> Optional[dict]:
-    """Check if a Pokemon should evolve based on data"""
+def check_evolution(pokemon_id: int, current_level: int) -> Optional[Dict]:
+    """
+    Check if a Pokémon should evolve based on its level.
+    Returns evolution data if ready to evolve, None otherwise.
+    """
     if pokemon_id not in EVOLUTION_DATA:
         return None
-
+    
     evolution_id, required_level = EVOLUTION_DATA[pokemon_id]
-
+    
     if current_level >= required_level:
         evolution_data = fetch_pokemon_data(evolution_id)
         if evolution_data:
@@ -145,5 +161,5 @@ def check_evolution(pokemon_id: int, current_level: int) -> Optional[dict]:
                 "evolves_to_sprite": evolution_data["sprite_url"],
                 "required_level": required_level
             }
+    
     return None
-

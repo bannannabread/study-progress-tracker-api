@@ -1407,3 +1407,324 @@
     justify-content: center;
   }
 }
+
+/* Evolution Notification Styles */
+.evolution-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.evolution-overlay.show {
+  opacity: 1;
+}
+
+.evolution-container {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border-radius: 24px;
+  padding: 3rem;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  border: 4px solid #64748b;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.evolution-stage h2 {
+  color: #f1f5f9;
+  font-size: 2rem;
+  margin: 0 0 2rem 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.evolution-sprite {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.evolution-sprite img {
+  width: 160px;
+  height: 160px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+.sprite-flash {
+  animation: flash 0.5s infinite;
+}
+
+@keyframes flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.evolution-sprite.evolving {
+  animation: pulse 0.5s infinite;
+}
+
+.evolution-light {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.8) 0%, transparent 70%);
+  animation: evolve-glow 1s infinite;
+}
+
+@keyframes evolve-glow {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.sprite-appear {
+  animation: appear 0.8s ease-out;
+}
+
+@keyframes appear {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.evolution-name,
+.evolution-text {
+  color: #cbd5e1;
+  font-size: 1.3rem;
+  margin: 1rem 0;
+  text-transform: capitalize;
+}
+
+.evolution-message {
+  color: #f1f5f9;
+  font-size: 1.5rem;
+  margin: 1rem 0;
+  text-transform: capitalize;
+}
+
+.evolution-message strong {
+  color: #fbbf24;
+  font-weight: 800;
+}
+
+.evolution-level {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.evolution-close {
+  padding: 1rem 3rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 1rem;
+}
+
+.evolution-close:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
+}
+
+/* General Polish & Animations */
+
+/* Smooth page transitions */
+.content {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button hover effects enhancement */
+button {
+  position: relative;
+  overflow: hidden;
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Card entrance animations */
+.subject-card-pokemon,
+.session-card,
+.safari-pokemon-card {
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger animation for grids */
+.subjects-grid > *:nth-child(1) { animation-delay: 0.05s; }
+.subjects-grid > *:nth-child(2) { animation-delay: 0.1s; }
+.subjects-grid > *:nth-child(3) { animation-delay: 0.15s; }
+.subjects-grid > *:nth-child(4) { animation-delay: 0.2s; }
+.subjects-grid > *:nth-child(5) { animation-delay: 0.25s; }
+.subjects-grid > *:nth-child(6) { animation-delay: 0.3s; }
+
+/* Pokémon sprite hover effect */
+.pokemon-sprite,
+.ace-sprite,
+.starter-sprite img,
+.safari-sprite img {
+  transition: transform 0.3s ease;
+}
+
+.pokemon-sprite:hover,
+.ace-sprite:hover,
+.starter-sprite:hover img,
+.safari-sprite:hover img {
+  transform: scale(1.1) translateY(-5px);
+}
+
+/* Level badge pulse on hover */
+.pokemon-level-badge:hover,
+.ace-level-display:hover {
+  animation: badgePulse 0.6s ease;
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Tab switching animation */
+.tab {
+  position: relative;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+  border-radius: 2px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Loading spinner */
+.loading {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Success notification */
+.success-toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(16, 185, 129, 0.3);
+  animation: toastSlide 0.3s ease-out;
+  z-index: 1000;
+}
+
+@keyframes toastSlide {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

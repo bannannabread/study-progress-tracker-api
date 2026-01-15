@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import EvolutionNotification from '../components/EvolutionNotification';
 
 function Timer() {
   const [topics, setTopics] = useState([]);
@@ -6,6 +7,7 @@ function Timer() {
   const [seconds, setSeconds] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [activeSessionId, setActiveSessionId] = useState(null);
+  const [evolutionData, setEvolutionData] = useState(null);
 
   // Fetch topics on mount
   useEffect(() => {
@@ -70,21 +72,31 @@ function Timer() {
     if (!activeSessionId) return;
 
     const durationMinutes = Math.floor(seconds / 60);
-    
+
     try {
       const response = await fetch(`http://localhost:8000/sessions/${activeSessionId}/end`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ duration_minutes: durationMinutes })
       });
-      
+
       if (!response.ok) throw new Error('Failed to end session');
-      
+
+      const data = await response.json();
+
+      // Check if evolution happened
+      if (data.evolution) {
+        setEvolutionData(data.evolution);
+      }
+
       // Reset timer
       setIsRunning(false);
       setSeconds(0);
       setActiveSessionId(null);
-      alert(`Session saved! You studied for ${durationMinutes} minutes.`);
+
+      if (!data.evolution) {
+        alert(`Session saved! You studied for ${durationMinutes} minutes.`);
+      }
     } catch (err) {
       console.error('Error ending session:', err);
       alert('Failed to save session');
@@ -93,6 +105,13 @@ function Timer() {
 
   return (
     <div className="timer-container">
+      {evolutionData && (
+        <EvolutionNotification 
+          evolutionData={evolutionData}
+          onClose={() => setEvolutionData(null)}
+        />
+      )}
+      
       <h2>Study Timer</h2>
       
       {/* Subject Selector */}
