@@ -5,6 +5,7 @@ import Timer from './timer/StudyTimer';
 import History from './history/StudyHistory';
 import Statistics from './statistics/Statistics'
 import StarterSelection from './components/StarterSelection'
+import AcePokemonBar from './components/ExpBar'
 
 function App() {
   const [activeTab, setActiveTab] = useState('subjects');
@@ -41,7 +42,7 @@ function App() {
   return (
     <div className='App'>
       <h1 className='title'>STUDYMON</h1>
-      {/*Exp Bar Placeholder */}
+      <AcePokemonBar />
       <div className='exp-bar'>
         <h2>Level 1 - 0 XP</h2>
       </div>
