@@ -4,7 +4,7 @@ from ..database import get_session
 from ..models import StudySession, Topic
 from ..session_schemas import SessionCreate, SessionEnd, SessionResponse
 from datetime import datetime
-from ..pokemon.pokemon_utils import calculate_level_from_exp, EXP_PER_MINUTE
+from ..pokemon.pokemon_utils import calculate_level_from_exp, EXP_PER_MINUTE, check_evolution, fetch_pokemon_data
 
 router = APIRouter(prefix = "/sessions", tags = ["Sessions"])
 
@@ -49,6 +49,8 @@ def end_session(session_id: int, session_data: SessionEnd, db: Session = Depends
 
     # update the topic's minutes spent
     topic = db.get(Topic, study_session.topic_id)
+    evolution_data = None
+
     if topic:
         topic.minutes_spent += session_data.duration_minutes
 
@@ -57,16 +59,38 @@ def end_session(session_id: int, session_data: SessionEnd, db: Session = Depends
 
         if topic.pokemon_id:
             exp_gained = session_data.duration_minutes * EXP_PER_MINUTE
+            old_level = topic.pokemon_level
             topic.pokemon_exp += exp_gained
 
             new_level, _ = calculate_level_from_exp(topic.pokemon_exp)
             topic.pokemon_level = new_level
 
+            if new_level > old_level:
+                evolution_check = check_evolution(topic.pokemon_id, new_level)
+                if evolution_check:
+                    evolution_data = {
+                        "evolved": True,
+                        "from_name": topic.pokemon_name,
+                        "from_id": topic.pokemon_id,
+                        "to_name": evolution_check["evolves_to_name"],
+                        "to_id": evolution_check["evolves_to_id"],
+                        "at_level": new_level
+                    }
+
+                    topic.pokemon_id = evolution_check["evolves_to_id"]
+                    topic.pokemon_name = evolution_check["evolves_to_name"]
+                    topic.pokemon_sprite_url = evolution_check["evolves_to_sprite"]
+
     # save it
     db.add(study_session)
     db.commit()
     db.refresh(study_session)
-    return study_session
+
+    response = study_session.dict()
+    if evolution_data:
+        response["evolution"] = evolution_data
+
+    return response
 
 @router.get("/", response_model = list[SessionResponse])
 def get_sessions(topic_id: int = None, db: Session = Depends(get_session)):
