@@ -20,13 +20,13 @@ A gamified study tracker that combines productivity with Pokémon! Train your Po
 - **Evolution** - Pokémon automatically evolve at certain levels
 - **Ace Pokémon Display** - Top bar shows your highest-level Pokémon
 
-### 📊 Progress Tracking
+### Progress Tracking
 - **EXP Bars** - Visual progress bars showing how close you are to the next level
 - **Study Time** - Total time spent on each subject
 - **Subject Status** - Track subjects as not started, in progress, or completed
 - **Session Filtering** - Filter history by subject
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Backend
 - **FastAPI** - Modern Python web framework
@@ -95,7 +95,7 @@ npm start
 
 Frontend will be available at `http://localhost:3000`
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 study-tracker/
@@ -130,7 +130,7 @@ study-tracker/
     └── App.css
 ```
 
-## 🎯 How to Use
+## How to Use
 
 ### First Time Setup
 1. Launch the app
@@ -196,7 +196,7 @@ Modify the Safari Zone range in `app/routers/pokemon.py`:
 random_id = random.randint(1, 151)  # Currently Gen 1 only
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Backend won't start
 - Make sure Python virtual environment is activated
@@ -229,7 +229,7 @@ random_id = random.randint(1, 151)  # Currently Gen 1 only
 - [ ] Study streaks and daily goals
 - [ ] Shiny Pokémon variants (rare encounters)
 
-## 📝 License
+## License
 
 MIT License - feel free to use this project however you'd like!
 
@@ -240,8 +240,7 @@ MIT License - feel free to use this project however you'd like!
 - FastAPI and React communities for excellent documentation
 - My friends, for pushing me to do my best in everything
 
-## 👤 Author
-python -m uvicorn app.main:app --reload
+## Author
 Created with ❤️ by Megan Mae Jacob
 
 ---
